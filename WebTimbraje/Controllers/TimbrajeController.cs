@@ -116,12 +116,12 @@ namespace WebTimbraje.Controllers
             {
                 using var req = new HttpRequestMessage(
                     HttpMethod.Post,
-                    "https://api.foldererp.com/api/BoletaElectronica/Save");
+                    "URL");
 
-                // Headers EXACTOS requeridos por FolderERP
+               
                 req.Headers.Add("Empresa_ID", empresaId.ToString());
-                req.Headers.Add("Usuario_ID", "theline@thelinegroup.cl");
-                req.Headers.Add("Tocken", "32dee7daf6764634810f73bd595fae6b");
+                req.Headers.Add("Usuario_ID", "usuario");
+                req.Headers.Add("Tocken", "Tocken");
                 req.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
 
                 req.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
@@ -129,7 +129,7 @@ namespace WebTimbraje.Controllers
                 using var resp = await _http.SendAsync(req, ct);
                 var respText = await resp.Content.ReadAsStringAsync(ct);
 
-                // ❌ Error HTTP
+                
                 if (!resp.IsSuccessStatusCode)
                 {
                     return new TimbradoResult
@@ -139,7 +139,7 @@ namespace WebTimbraje.Controllers
                     };
                 }
 
-                // ✅ Deserializar respuesta
+                
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -156,14 +156,12 @@ namespace WebTimbraje.Controllers
                     };
                 }
 
-                // 🟡 Detectar documento ya timbrado
+                
                 bool yaTimbrado =
                     !string.IsNullOrWhiteSpace(data.Mensaje) &&
                     data.Mensaje.Contains("ya existe", StringComparison.OrdinalIgnoreCase);
 
-                // 🟢 Éxito real:
-                // - Tiene Folio
-                // - Tiene URL
+                
                 bool success =
                     data.FolioDTE > 0 &&
                     !string.IsNullOrWhiteSpace(data.UrlDTE);
