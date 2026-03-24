@@ -1,0 +1,44 @@
+# .gitignore para soluciones .NET / Visual Studio
+# Generado para evitar subir bin/, obj/ y archivos de compilación temporales
+
+# Visual Studio
+.vs/
+
+# Build output
+**/bin/
+**/obj/
+
+# Publicación / artefactos
+/publish/
+/artifacts/
+
+# Paquetes NuGet
+/packages/
+*.nupkg
+*.snupkg
+
+# Archivos de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs, cachés y archivos temporales
+*.log
+*.cache
+*.tmp
+*.bak
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración local (contienen secretos), opcional
+appsettings.Development.json
+
+# Rider
+.idea/
+
+# Resaltar: evitar subir compilados de release/debug
+**/bin/*
+**/obj/*
