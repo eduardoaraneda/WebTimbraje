@@ -1,52 +1,43 @@
-# WebTimbraje
+# Web Timbraje
 
-Proyecto ASP.NET (Razor Pages / MVC) para integración con FolderERP para timbraje de documentos electrónicos.
+Aplicación ASP.NET Core MVC que consulta documentos comerciales en SQL Server y prepara su envío al servicio de FolderERP para el flujo de timbraje de documentos electrónicos.
 
-Descripción
-- Aplicación web en .NET 10 que consulta documentos desde un repositorio y envía el JSON al servicio de FolderERP para generar/firmar documentos electrónicos.
+## Tecnologías
 
-Requisitos
-- .NET 10 SDK
-- Visual Studio 2022/2026 o VS Code
-- Conexión a la base de datos configurada en `appsettings.*.json` (se usa Dapper y Microsoft.Data.SqlClient)
+C# · .NET 10 · ASP.NET Core MVC · Razor · SQL Server · Dapper · Microsoft.Data.SqlClient · HttpClient · JSON.
 
-Instalación y ejecución
-1. Clona el repositorio:
-   ```powershell
-   git clone <repo-url>
-   cd WebTimbraje
-   ```
-2. Restaurar paquetes y compilar:
-   ```powershell
-   dotnet restore
-   dotnet build
-   ```
-3. Ejecutar en modo desarrollo:
-   ```powershell
-   dotnet run --project WebTimbraje
-   ```
-   La aplicación estará disponible en https://localhost:5001 (o el puerto que indique la salida).
+## Flujo y organización
 
-Configuración
-- `WebTimbraje.csproj` targeting `net10.0`.
-- No incluir archivos de compilación en el control de versiones: se añadió `.gitignore` para ignorar `bin/` y `obj/`.
-- Ajusta `appsettings.Development.json` con la cadena de conexión y otros valores locales. Este archivo está en `.gitignore` por seguridad.
+1. `TimbrajeController` recibe los datos del documento y empresa.
+2. `Servicios/` consulta documentos y datos del emisor mediante procedimientos almacenados.
+3. El controlador utiliza la integración con FolderERP para procesar el envío.
 
-Uso
-- Interfaz principal: `Views/Timbraje/Index.cshtml`.
-- Endpoint para timbrar (POST): `/Timbraje/Timbrar` con parámetros: `tipo`, `numero`, `empresa`.
-- Lógica principal del envío a FolderERP en `TimbrajeController.TimbraDocumento`.
+El proyecto web está en `WebTimbraje/`; la solución es `WebTimbraje.slnx`.
 
-Buenas prácticas
-- No subir secretos ni archivos de configuración locales (`appsettings.Development.json` está ignorado).
-- Reutilizar `HttpClient` (ya se inyecta en el controlador).
+## Compilar y ejecutar
 
-Contribuir
-- Abrir un issue para bugs o mejoras.
-- Enviar pull requests contra la rama `main`.
+Con el SDK de .NET 10 instalado, desde la raíz:
 
-Licencia
-- Añadir aquí la licencia del proyecto (por ejemplo MIT) si procede.
+```powershell
+dotnet restore WebTimbraje.slnx
+dotnet build WebTimbraje.slnx
+dotnet run --project WebTimbraje/WebTimbraje.csproj
+```
 
-Contacto
-- Mantén los datos de contacto y credenciales fuera del repositorio.
+Abre la URL de la terminal; la ruta inicial es `/Timbraje/Index`.
+
+## Dependencias externas
+
+La compilación no equivale a una integración operativa. Necesitas las bases SQL, procedimientos almacenados, datos del emisor y acceso autorizado a FolderERP. El repositorio no contiene un entorno de pruebas autónomo ni el esquema completo de las bases.
+
+El repositorio de datos selecciona conexiones por empresa, con claves como `ConnectionStrings:TB`, `ConnectionStrings:ANDPAC` y `ConnectionStrings:SRV_VENTAS`. Configúralas mediante variables de entorno usando doble guion bajo, por ejemplo `ConnectionStrings__TB`.
+
+Revisa el destino y la configuración de la integración antes de ejecutar envíos. Para una demostración utiliza un entorno de pruebas autorizado; no envíes documentos reales como prueba del portafolio.
+
+## Configuración y alcance
+
+Usa una base de desarrollo y credenciales propias. Configura secretos mediante variables de entorno o User Secrets; no los incluyas en commits. La compilación no comprueba la disponibilidad de bases de datos, SMTP o APIs externas.
+
+## Autor
+
+[Eduardo Araneda](https://github.com/eduardoaraneda) · [Portafolio](https://eduardoaraneda.github.io/Portafolio/)

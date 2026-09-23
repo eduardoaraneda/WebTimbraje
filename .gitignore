@@ -42,3 +42,23 @@ appsettings.Development.json
 # Resaltar: evitar subir compilados de release/debug
 **/bin/*
 **/obj/*
+
+# Archivos generados y configuración local
+**/bin/
+**/obj/
+.vs/
+**/node_modules/
+*.csproj.user
+*.suo
+**/appsettings.Local.json
+**/appsettings.*.Local.json
+**/secrets.json
+**/.env
+**/.env.*
+!**/.env.example
+artifacts/
+TestResults/
+**/TestResults/
+*.pfx
+*.p12
+*.key
